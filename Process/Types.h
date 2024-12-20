@@ -25,4 +25,7 @@ typedef struct P {
 typedef struct CharFreq {
     char character;
     int weight;
+    char* code;
 } CharWeight;
+
+#endif
