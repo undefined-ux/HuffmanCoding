@@ -4,52 +4,80 @@
 #include "Encoder.h"
 #include "Input.h"
 #include "Types.h"
-void setInputAndOutputStream(FILE* file){
-    char filename[BUFFER_SIZE];
+/*
+typedef struct P {
+    int textLength;
+    char* text;
+} Paragraph;
+typedef struct CharFreq {
+    DataType character;
+    int weight;
+    char* code;
+} CharWeight;
+*/
+int CharCmp(const void* a, const void* b) {
+    return ((CharWeight*)a) -> weight - ((CharWeight*)b) -> weight;
+}
 
-}
-void addCharWeight(CharWeight *Weight, int *size, char ch) {
-    for (int i = 0; i < *size; i++) {
-        if (Weight[i].character == ch) {
-            Weight[i].weight++;
-            return;
-        }
+
+void OutputHuffmanCodes(CharWeight* ChWeight, int freq, const char* outputFilename) {
+    // 修改文件后缀
+    char outputFile[256];
+    strcpy(outputFile, outputFilename);
+    strcat(outputFile, ".z");
+
+    FILE* outputFilePtr = fopen(outputFile, "w");
+    if (outputFilePtr == NULL) {
+        perror("Error opening output file");
+        exit(EXIT_FAILURE);
     }
-    Weight[*size].character = ch;
-    Weight[*size].weight = 1;
-    (*size)++;
+
+    // 输出霍夫曼编码到文件
+    for (int i = 0; i < freq; i++) {
+        fprintf(outputFilePtr, "Character: %c, Weight: %d, Code: %s\n", ChWeight[i].character, ChWeight[i].weight, ChWeight[i].code);
+        free(ChWeight[i].code); // 释放编码字符串的内存
+    }
+
+    fclose(outputFilePtr);
 }
-void setInputStream(FILE* file,char* filename) {
-  	int weight[256];
+
+void setInputStream(FILE* file, char* filename) {
+    int weight[257] = {0};
     file = fopen(filename, "r");
- 	Paragraph paragraph;
+    Paragraph paragraph;
     if (file == NULL) {
-         perror("File not found");
-         exit(EXIT_FAILURE);
+        perror("File not found");
+        exit(EXIT_FAILURE);
     } else {
         char* txt = (char*)malloc(BUFFER_SIZE * sizeof(char));
-        paragraph.text = txt;
-        while(fgets(txt,BUFFER_SIZE,file)) {
-			memset(weight, 0, 256 * sizeof(int));
-            memset(txt, 0, BUFFER_SIZE * sizeof(char));
-          	paragraph.textLength = strlen(txt);
-			  	if(paragraph.textLength == 1 && txt[0] == '\n') {
-              	    if(paragraph.textLength > 1) {
-                    	paragraph.text[paragraph.textLength - 1] = '\0';
-						int n = 0;
-                        for(int i = 0; i < paragraph.textLength - 1; i++) {
-
-						}
-                        HuffmanTree* tree = CreateHuffmanTree(weight, paragraph.textLength);
-          	 	 	}
-		  	    }
-				continue;
+        while (fgets(txt, BUFFER_SIZE, file)) {
+            memset(weight, 0, 257 * sizeof(int));
+            paragraph.text = txt;
+            paragraph.textLength = strlen(txt);
+            if (paragraph.textLength > 1 && txt[0] != '\n') {
+                int freq = 0;
+                for (int p = 0; p < paragraph.textLength; p++) {
+                    if (weight[(unsigned char)paragraph.text[p]] == 0) {
+                        freq++;
+                    }
+                    weight[(unsigned char)paragraph.text[p]]++;
+                }
+                CharWeight* ChWeight = (CharWeight*)malloc(freq * sizeof(CharWeight));
+                int point = 0;
+                for (int ch = 0; ch < 257; ch++) {
+                    if (weight[ch] != 0) {
+                        ChWeight[point].character = ch;
+                        ChWeight[point ++].weight = weight[ch];
+                    }
+                }
+                qsort(ChWeight, freq, sizeof(CharWeight), CharCmp);
+                HuffmanTree* tree = CreateHuffmanTree(ChWeight, freq);
+				GenerateHuffmanCodes(tree, ChWeight, freq);
+                OutputHuffmanCodes(ChWeight, freq, filename);
+                free(ChWeight);
+            }
         }
+        free(txt);
+        fclose(file);
     }
 }
-Paragraph FileWriter(FILE* file,char* filename, int* weight) {
-    //输出霍夫曼编码
-    file = fopen(filename, "w");
-
-}
-void (*file_modifier)(FILE*, char*);
