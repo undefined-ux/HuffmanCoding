@@ -2,5 +2,5 @@
 #define HUFFMAN_H
 #include "Process/Encoder.h"
 #include "Process/Types.h"
-#include "Process/FileRW.h"
+#include "Process/Input.h"
 #endif
