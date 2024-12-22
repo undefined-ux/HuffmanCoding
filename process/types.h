@@ -19,12 +19,6 @@ typedef struct HTree {
 
 
 
-typedef struct CLArguments {
-    FILE* input;
-    FILE* output;
-    int compress;
-} CommandLineArgs;
-
 
 typedef struct P {
     int textLength;

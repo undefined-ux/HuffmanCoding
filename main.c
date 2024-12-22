@@ -4,6 +4,15 @@
 #include <windows.h>
 #include "huffman.h"
 
+
+
+typedef struct CLArguments {
+    FILE* input;
+    FILE* output;
+    int compress;
+} CommandLineArgs;
+
+
 CommandLineArgs parseCommandLineArgs(int argc, char* argv[]);
 
 
