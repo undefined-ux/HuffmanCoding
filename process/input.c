@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Encoder.h"
-#include "Input.h"
-#include "Types.h"
+#include "encoder.h"
+#include "input.h"
+#include "types.h"
 /*
 typedef struct P {
     int textLength;
