@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-#include "Types.h"
-#include "Encoder.h"
+#include "types.h"
+#include "encoder.h"
 
 void Select(HuffmanTree* HT, int end, int* index1, int* index2) {
     //选出两个权值最小的点
@@ -21,6 +21,7 @@ void Select(HuffmanTree* HT, int end, int* index1, int* index2) {
         }
     }
 }
+
 int WeightCmp(const CharWeight* a, const CharWeight* b) {
     const CharWeight* f1 = (const CharWeight*) a;
     const CharWeight* f2 = (const CharWeight*) b;
@@ -32,21 +33,6 @@ int WeightCmp(const CharWeight* a, const CharWeight* b) {
         return 0;  // 两者相等
     }
 }
-/*
-
-typedef char Datatype;
-typedef struct HTNode {
-	Datatype Data;
-    int weight;
-    int parent;
-    int left_child, right_child;
-} HuffmanTreeNode;
-typedef struct HTree {
-    HuffmanTreeNode* data;
-    int size;
-} HuffmanTree;
-
-*/
 
 HuffmanTree* CreateHuffmanTree(int* weight, int n) {
 
@@ -77,7 +63,7 @@ HuffmanTree* CreateHuffmanTree(int* weight, int n) {
     return HT;
 }
 
-void GenerateHuffmanCodes(HuffmanTree* tree, CharWeight* ChWeight, int freq) {
+void CreateHuffmanCodes(HuffmanTree* tree, CharWeight* ChWeight, int freq) {
     // 生成霍夫曼编码的函数实现
     char buffer[256];
     for (int i = 0; i < freq; i++) {
@@ -104,5 +90,26 @@ void GenerateHuffmanCodes(HuffmanTree* tree, CharWeight* ChWeight, int freq) {
         //copy进ChWeight里
         ChWeight[i].code = (char*)malloc((index + 1) * sizeof(char));
         strcpy(ChWeight[i].code, buffer);
+    }
+}
+
+int code[CODE_SIZE] = { 0 };
+int pointer = 0;
+
+void SaveHuffmanCodes(CharWeight* ChWeight, size_t size, Paragraph* paragraph) {
+    for (size_t i = 0; i < paragraph -> textLength; i++) {
+        for (size_t j = 0; j < size; j++) {
+            if (ChWeight[j].character == paragraph -> text[i]) {
+                size_t codeLength = strlen(ChWeight[j].code);
+                if (pointer + codeLength >= CODE_SIZE) {
+                    fprintf(stderr, "Error: code array overflow\n");
+                    exit(EXIT_FAILURE);
+                }
+                for (size_t k = 0; k < codeLength; k++) {
+                    code[pointer++] = ChWeight[j].code[k];
+                }
+                break;
+            }
+        }
     }
 }
