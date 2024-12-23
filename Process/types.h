@@ -1,25 +1,24 @@
-#ifndef TYPES_H
-#define TYPES_H
+#pragma once
+#define TEXT_SIZE 4096
 #define BUFFER_SIZE 2048
+#define CODE_SIZE 2048
+
+extern int code[CODE_SIZE];
+extern int pointer;
 
 typedef char Datatype;
 typedef struct HTNode { //霍夫曼树节点
-    Datatype character;
+    Datatype character; //字符
     int weight; //权
     int parent; //父节点
     int left_child, right_child; //左孩子，右孩子
 } HuffmanTreeNode;
 typedef struct HTree {
     HuffmanTreeNode* data;
-    int size;
+    size_t size;
 } HuffmanTree;
-typedef struct CLArguments {
-    FILE* input;
-    FILE* output;
-    int compress;
-} CommandLineArgs;
 typedef struct P {
-    int textLength;
+    size_t textLength;
     char* text;
 } Paragraph;
 typedef struct CharFreq {
@@ -27,5 +26,3 @@ typedef struct CharFreq {
     int weight;
     char* code;
 } CharWeight;
-
-#endif
