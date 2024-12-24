@@ -1,6 +1,9 @@
 #ifndef HUFFMAN_H
 #define HUFFMAN_H
-#include "Process/Encoder.h"
-#include "Process/Types.h"
-#include "Process/Input.h"
+
+#include "Process/encoder.h"
+#include "Process/types.h"
+#include "Process/input.h"
+#include "Process/output.h"
+
 #endif
