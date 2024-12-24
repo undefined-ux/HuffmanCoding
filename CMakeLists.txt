@@ -16,3 +16,5 @@ add_library(huffman
 add_executable(FProject
         main.c
 )
+
+target_link_libraries(FProject huffman)
