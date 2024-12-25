@@ -1,9 +1,10 @@
 #pragma once
+
 #define TEXT_SIZE 4096
 #define BUFFER_SIZE 2048
 #define CODE_SIZE 2048
 
-extern int code[CODE_SIZE];
+extern char code[CODE_SIZE];
 extern int pointer;
 
 typedef char Datatype;
@@ -26,3 +27,4 @@ typedef struct CharFreq {
     int weight;
     char* code;
 } CharWeight;
+
